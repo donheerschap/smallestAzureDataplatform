@@ -23,4 +23,5 @@ jobs:
             scope: 'subscription'
             template: ./infra/main.bicep
             parameters: ./infra/main.dev.bicepparam
+            region: 'westeurope'
             failOnStdErr: false
