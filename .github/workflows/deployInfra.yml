@@ -9,8 +9,6 @@ permissions:
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
-    env:
-        working-directory: infra/
     steps:
       - name: Azure login
         uses: azure/login@v2
