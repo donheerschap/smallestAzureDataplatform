@@ -21,6 +21,9 @@ module rg 'br/public:avm/res/resources/resource-group:0.2.4' = {
 module dl 'br/public:avm/res/storage/storage-account:0.9.1' = {
   name: '${deployment().name}-datalake'
   scope: resourceGroup(rgName)
+  dependsOn: [
+    rg
+  ]
   params: {
     name: dlName
     location: location
@@ -31,6 +34,9 @@ module dl 'br/public:avm/res/storage/storage-account:0.9.1' = {
 module asp 'br/public:avm/res/web/serverfarm:0.2.2' = {
   name: '${deployment().name}-appServicePlan'
   scope: resourceGroup(rgName)
+  dependsOn: [
+    rg
+  ]
   params: {
     name: aspName
     location: location
@@ -42,6 +48,9 @@ module asp 'br/public:avm/res/web/serverfarm:0.2.2' = {
 module fnstg 'br/public:avm/res/storage/storage-account:0.9.1' = {
   name: '${deployment().name}-functionStorage'
   scope: resourceGroup(rgName)
+  dependsOn: [
+    rg
+  ]
   params: {
     name: fnstgName
     location: location
@@ -51,6 +60,11 @@ module fnstg 'br/public:avm/res/storage/storage-account:0.9.1' = {
 module fn 'br/public:avm/res/web/site:0.3.9' = {
   name: '${deployment().name}-function'
   scope: resourceGroup(rgName)
+  dependsOn: [
+    rg
+    asp
+    fnstg
+  ]
   params: {
     name: fnName
     location: location   
