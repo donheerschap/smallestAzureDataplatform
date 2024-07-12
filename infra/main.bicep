@@ -3,12 +3,13 @@ metadata description = 'This is the main entry point for the smallestAzureDatapl
 
 targetScope = 'subscription'
 
-param location string = 'northeurope'
+param location string = 'westeurope'
 param rgName string
 param dlName string
 param fnName string
 param fnstgName string
 param aspName string
+param sqlServerName string
 
 module rg 'br/public:avm/res/resources/resource-group:0.2.4' = {
   name: '${deployment().name}-resourceGroup' 
@@ -78,5 +79,23 @@ module fn 'br/public:avm/res/web/site:0.3.9' = {
     }
     storageAccountResourceId: fnstg.outputs.resourceId
     storageAccountUseIdentityAuthentication: true
+  }
+}
+
+module sqlServer 'br/public:avm/res/sql/server:0.4.1' = {
+  name: '${deployment().name}-sqlServer'
+  scope: resourceGroup(rgName)
+  dependsOn: [
+    rg
+  ]
+  params: {
+    name: sqlServerName
+    location: location
+    administrators: {
+      azureADOnlyAuthentication: true
+      login: 'DBA'
+      principalType: 'Group'
+      sid: '9884c8da-3b27-43f2-96b5-ef5c7d2ef852'
+    }
   }
 }
