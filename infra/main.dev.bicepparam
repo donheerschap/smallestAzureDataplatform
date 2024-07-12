@@ -6,4 +6,5 @@ param dlName =  'dldonsaddeuw01' // Storage account is not allowed to have speci
 param aspName = 'asp-don-sad-d-euw-01'
 param fnstgName = 'fnstgdonsaddeuw01'
 param fnName = 'fn-don-sad-d-euw-01'
+param sqlServerName = 'sql-don-sad-d-euw-01'
 
