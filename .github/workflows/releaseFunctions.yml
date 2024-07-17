@@ -1,0 +1,59 @@
+name: Release functions to azure function
+on: 
+    workflow_dispatch:
+    push:
+        branches:
+            - main
+
+
+permissions:
+  id-token: write
+  contents: read
+env:
+  AZURE_FUNCTIONAPP_PACKAGE_PATH: 'functions' # set this to the path to your web app project, defaults to the repository root
+  PYTHON_VERSION: '3.11' 
+  AZURE_FUNCTIONAPP_NAME: 'fn-don-sad-d-eun-01'
+  AZURE_FUNCTIONAPP_RG: 'fnstgdonsaddeun01'
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      
+      - name: Setup Python version
+        uses: actions/setup-python@v1
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+
+      - name: Create and start virtual environment
+        run: |
+          python -m venv venv
+          source venv/bin/activate
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Upload artifact for deployment job
+        uses: actions/upload-artifact@v2
+        with:
+          name: python-app
+          path: |
+            . 
+            !venv/
+      
+      - name: Azure login
+        uses: azure/login@v2
+        with:
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+
+      - name: "Zip files for deployment"
+        run: zip python-app.zip *
+        
+      - name: Azure CLI script
+        uses: azure/CLI@v1
+        with:
+          azcliversion: 2.30.0
+          inlineScript: |
+            az functionapp deployment source config-zip -g ${{ env.AZURE_FUNCTIONAPP_RG }} -n ${{ env.AZURE_FUNCTIONAPP_NAME }} --src python-app.zip
