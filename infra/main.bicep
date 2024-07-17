@@ -3,7 +3,7 @@ metadata description = 'This is the main entry point for the smallestAzureDatapl
 
 targetScope = 'subscription'
 
-param location string = 'westeurope'
+param location string = 'northeurope'
 param rgName string
 param dlName string
 param fnName string
