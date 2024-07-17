@@ -42,7 +42,7 @@ module asp 'br/public:avm/res/web/serverfarm:0.2.2' = {
     name: aspName
     location: location
     skuCapacity: 1 
-    skuName: 'F1' 
+    skuName: 'B1' 
   } 
 }
 
