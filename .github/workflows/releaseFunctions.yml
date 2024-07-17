@@ -13,7 +13,7 @@ env:
   AZURE_FUNCTIONAPP_PACKAGE_PATH: 'functions' # set this to the path to your web app project, defaults to the repository root
   PYTHON_VERSION: '3.11' 
   AZURE_FUNCTIONAPP_NAME: 'fn-don-sad-d-eun-01'
-  AZURE_FUNCTIONAPP_RG: 'fnstgdonsaddeun01'
+  AZURE_FUNCTIONAPP_RG: 'rg-don-sad-d-eun-01'
 jobs:
   build-and-release:
     runs-on: ubuntu-latest
