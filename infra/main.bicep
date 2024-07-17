@@ -42,7 +42,7 @@ module asp 'br/public:avm/res/web/serverfarm:0.2.2' = {
     name: aspName
     location: location
     skuCapacity: 1 
-    skuName: 'Y1' 
+    skuName: 'B1' 
     reserved: true
     kind: 'Linux'
   } 
@@ -80,7 +80,7 @@ module fn 'br/public:avm/res/web/site:0.3.9' = {
     appSettingsKeyValuePairs: {
       FUNCTIONS_WORKER_RUNTIME: 'python'
       FUNCTIONS_EXTENSION_VERSION: '~4'
-      WEBSITE_RUN_FROM_PACKAGE: 'URL'
+      WEBSITE_RUN_FROM_PACKAGE: '1'
     }
     managedIdentities: {
       systemAssigned: true
