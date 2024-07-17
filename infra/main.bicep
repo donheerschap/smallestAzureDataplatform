@@ -43,6 +43,7 @@ module asp 'br/public:avm/res/web/serverfarm:0.2.2' = {
     location: location
     skuCapacity: 1 
     skuName: 'Y1' 
+    reserved: true
   } 
 }
 
