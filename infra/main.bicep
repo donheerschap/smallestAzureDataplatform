@@ -42,7 +42,7 @@ module asp 'br/public:avm/res/web/serverfarm:0.2.2' = {
     name: aspName
     location: location
     skuCapacity: 1 
-    skuName: 'B1' 
+    skuName: 'Y1' 
   } 
 }
 
@@ -73,6 +73,7 @@ module fn 'br/public:avm/res/web/site:0.3.9' = {
     serverFarmResourceId: asp.outputs.resourceId
     siteConfig: {
       pythonVersion: '3.11'
+      linuxFxVersion: 'python|3.11'
     }
     appSettingsKeyValuePairs: {
       FUNCTIONS_WORKER_RUNTIME: 'python'
