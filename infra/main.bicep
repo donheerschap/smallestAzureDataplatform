@@ -44,6 +44,7 @@ module asp 'br/public:avm/res/web/serverfarm:0.2.2' = {
     skuCapacity: 1 
     skuName: 'Y1' 
     reserved: true
+    kind: 'Linux'
   } 
 }
 
