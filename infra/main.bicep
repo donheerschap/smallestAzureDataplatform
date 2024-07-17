@@ -72,7 +72,7 @@ module fn 'br/public:avm/res/web/site:0.3.9' = {
     kind: 'functionapp,linux'
     serverFarmResourceId: asp.outputs.resourceId
     siteConfig: {
-      pythonVersion: '3.9'
+      pythonVersion: '3.11'
     }
     appSettingsKeyValuePairs: {
       FUNCTIONS_WORKER_RUNTIME: 'python'
