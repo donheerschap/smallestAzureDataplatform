@@ -11,7 +11,7 @@ param fnstgName string
 param aspName string
 param sqlServerName string
 
-module rg 'br/public:avm/res/resources/resource-group:0.2.4' = {
+module rg 'br/public:avm/res/resources/resource-group:0.2.4' = { // Resource group to contain all resources
   name: '${deployment().name}-resourceGroup' 
   params: {
     name: rgName
@@ -19,7 +19,7 @@ module rg 'br/public:avm/res/resources/resource-group:0.2.4' = {
   }
 }
 
-module dl 'br/public:avm/res/storage/storage-account:0.9.1' = {
+module dl 'br/public:avm/res/storage/storage-account:0.9.1' = { // Data lake which will store raw data
   name: '${deployment().name}-datalake'
   scope: resourceGroup(rgName)
   dependsOn: [
@@ -28,11 +28,11 @@ module dl 'br/public:avm/res/storage/storage-account:0.9.1' = {
   params: {
     name: dlName
     location: location
-    enableHierarchicalNamespace: true
+    enableHierarchicalNamespace: true // Required to enabled data lake gen2 instead of blob storage
   }
 }
 
-module asp 'br/public:avm/res/web/serverfarm:0.2.2' = {
+module asp 'br/public:avm/res/web/serverfarm:0.2.2' = { // Hosting for the function app
   name: '${deployment().name}-appServicePlan'
   scope: resourceGroup(rgName)
   dependsOn: [
@@ -42,13 +42,13 @@ module asp 'br/public:avm/res/web/serverfarm:0.2.2' = {
     name: aspName
     location: location
     skuCapacity: 1 
-    skuName: 'B1' 
-    reserved: true
-    kind: 'Linux'
+    skuName: 'B1' // Can't use free tier because it doesn't support deployments from a package
+    reserved: true // Required for Linux
+    kind: 'Linux' // Needed for a python function app
   } 
 }
 
-module fnstg 'br/public:avm/res/storage/storage-account:0.9.1' = {
+module fnstg 'br/public:avm/res/storage/storage-account:0.9.1' = { // Storage account for the function app backend (where the function app code is stored)
   name: '${deployment().name}-functionStorage'
   scope: resourceGroup(rgName)
   dependsOn: [
@@ -60,7 +60,7 @@ module fnstg 'br/public:avm/res/storage/storage-account:0.9.1' = {
   }
 }
 
-module fn 'br/public:avm/res/web/site:0.3.9' = {
+module fn 'br/public:avm/res/web/site:0.3.9' = { // Function app which will run the python code
   name: '${deployment().name}-function'
   scope: resourceGroup(rgName)
   dependsOn: [
@@ -80,17 +80,17 @@ module fn 'br/public:avm/res/web/site:0.3.9' = {
     appSettingsKeyValuePairs: {
       FUNCTIONS_WORKER_RUNTIME: 'python'
       FUNCTIONS_EXTENSION_VERSION: '~4'
-      WEBSITE_RUN_FROM_PACKAGE: '1'
+      WEBSITE_RUN_FROM_PACKAGE: '1' // Required to be able to deploy from a package
     }
     managedIdentities: {
-      systemAssigned: true
+      systemAssigned: true // Creates a managed identity for the function app to access other azure resources
     }
     storageAccountResourceId: fnstg.outputs.resourceId
-    storageAccountUseIdentityAuthentication: true
+    storageAccountUseIdentityAuthentication: true // Required to be able to access the storage account without access keys
   }
 }
 
-module sqlServer 'br/public:avm/res/sql/server:0.4.1' = {
+module sqlServer 'br/public:avm/res/sql/server:0.4.1' = { // SQL server which will store the processed data
   name: '${deployment().name}-sqlServer'
   scope: resourceGroup(rgName)
   dependsOn: [
@@ -99,7 +99,7 @@ module sqlServer 'br/public:avm/res/sql/server:0.4.1' = {
   params: {
     name: sqlServerName
     location: location
-    administrators: {
+    administrators: { // This enabled entra security by only allowing the specified users to access the server, and disables a root user with a password.
       azureADOnlyAuthentication: true
       login: 'DBA'
       principalType: 'User'
