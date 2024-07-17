@@ -80,6 +80,7 @@ module fn 'br/public:avm/res/web/site:0.3.9' = {
     appSettingsKeyValuePairs: {
       FUNCTIONS_WORKER_RUNTIME: 'python'
       FUNCTIONS_EXTENSION_VERSION: '~4'
+      WEBSITE_RUN_FROM_PACKAGE: 'URL'
     }
     managedIdentities: {
       systemAssigned: true
