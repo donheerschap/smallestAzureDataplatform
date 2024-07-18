@@ -88,6 +88,7 @@ module fn 'br/public:avm/res/web/site:0.3.9' = { // Function app which will run 
     appSettingsKeyValuePairs: {
       FUNCTIONS_WORKER_RUNTIME: 'python'
       FUNCTIONS_EXTENSION_VERSION: '~4'
+      WEBSITE_RUN_FROM_PACKAGE: '1'
     }
     managedIdentities: {
       systemAssigned: true // Creates a managed identity for the function app to access other azure resources
