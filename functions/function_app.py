@@ -6,7 +6,6 @@ import requests
 
 app = func.FunctionApp()
 
-# https://api.open-meteo.com/v1/forecast?latitude=52.374&longitude=4.8897&hourly=temperature_2m&past_days=1&forecast_days=1
 @app.route(route="MyHttpTrigger", auth_level=func.AuthLevel.ANONYMOUS)
 def MyHttpTrigger(req: func.HttpRequest) -> func.HttpResponse:
     logging.info('Python HTTP trigger function processed a request.')
