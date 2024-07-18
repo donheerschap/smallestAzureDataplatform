@@ -29,10 +29,10 @@ module dl 'br/public:avm/res/storage/storage-account:0.9.1' = { // Data lake whi
     name: dlName
     location: location
     enableHierarchicalNamespace: true // Required to enabled data lake gen2 instead of blob storage
-    roleassignments: [ // Assigns the storage account to the managed identity of the function app, so that the function app can access the storage account
+    roleAssignments: [
       {
-        principalId: fn.outputs.identity.principalId
-        roleDefinitionId: 'b07a5da6-6bb8-4b3a-9d91-7f9885a068d3' // Storage Blob Data Contributor
+        principalId: fn.outputs.systemAssignedMIPrincipalId
+        roleDefinitionIdOrName: 'Storage Blob Data Contributor'
       }
     ]
   }
@@ -63,6 +63,7 @@ module fnstg 'br/public:avm/res/storage/storage-account:0.9.1' = { // Storage ac
   params: {
     name: fnstgName
     location: location
+    
   }
 }
 
