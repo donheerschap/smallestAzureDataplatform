@@ -19,24 +19,22 @@ env:
 jobs:
   build-and-release:
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: ${{ env.AZURE_FUNCTIONAPP_PACKAGE_PATH }}
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
       
       - name: Setup Python version
-        uses: actions/setup-python@v1
+        uses: actions/setup-python@v4
         with:
           python-version: ${{ env.PYTHON_VERSION }}
 
-      - name: Create and start virtual environment
+      - name: 'Resolve Project Dependencies Using Pip'
+        shell: bash
         run: |
-          python -m venv venv
-          source venv/bin/activate
-      - name: Install dependencies
-        run: pip install -r requirements.txt --target=".python_packages/lib/site-packages"
+          pushd './${{ env.AZURE_FUNCTIONAPP_PACKAGE_PATH }}'
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt --target=".python_packages/lib/site-packages"
+          popd
 
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v2
@@ -53,7 +51,10 @@ jobs:
           subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
 
       - name: "Zip files for deployment"
-        run: zip python-app.zip *
+        run: |
+          pushd './${{ env.AZURE_FUNCTIONAPP_PACKAGE_PATH }}'
+          zip python-app.zip *
+          popd
         
       - name: Azure CLI script
         uses: azure/CLI@v1
