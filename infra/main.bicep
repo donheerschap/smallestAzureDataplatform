@@ -29,6 +29,7 @@ module dl 'br/public:avm/res/storage/storage-account:0.9.1' = { // Data lake whi
     name: dlName
     location: location
     enableHierarchicalNamespace: true // Required to enabled data lake gen2 instead of blob storage
+    publicNetworkAccess: 'Enabled'
     roleAssignments: [
       {
         principalId: fn.outputs.systemAssignedMIPrincipalId
@@ -63,6 +64,7 @@ module fnstg 'br/public:avm/res/storage/storage-account:0.9.1' = { // Storage ac
   params: {
     name: fnstgName
     location: location
+    publicNetworkAccess: 'Enabled'
   }
 }
 
@@ -86,7 +88,6 @@ module fn 'br/public:avm/res/web/site:0.3.9' = { // Function app which will run 
     appSettingsKeyValuePairs: {
       FUNCTIONS_WORKER_RUNTIME: 'python'
       FUNCTIONS_EXTENSION_VERSION: '~4'
-      WEBSITE_RUN_FROM_PACKAGE: '1' // Required to be able to deploy from a package
     }
     managedIdentities: {
       systemAssigned: true // Creates a managed identity for the function app to access other azure resources
