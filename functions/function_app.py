@@ -28,7 +28,7 @@ def MyHttpTrigger(req: func.HttpRequest) -> func.HttpResponse:
         )
     
 @app.route(route="TestWeatherAPI", auth_level=func.AuthLevel.ANONYMOUS)
-@app.blob_output(name='datalake', path='output/test.json', connection='DATALAKE__serviceUri')
+@app.blob_output(arg_name='datalake', path='output/test.json', connection='DATALAKE__serviceUri')
 def TestWeatherAPI(req: func.HttpRequest, datalake: func.Out[str]) -> func.HttpResponse:
     logging.info('Python HTTP trigger function processed a request.')
 
