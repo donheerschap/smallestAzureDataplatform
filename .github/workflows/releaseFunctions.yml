@@ -44,7 +44,7 @@ jobs:
           name: python-app
           path: |
             ./functions
-            !venv/
+            !./functions/venv/
       
       - name: Azure login
         uses: azure/login@v2
