@@ -38,6 +38,7 @@ def TestWeatherAPI(req: func.HttpRequest) -> func.HttpResponse:
         ).json()
     
     return func.HttpResponse(
-        data,
-        status_code=200
+        json.dumps(data),
+        status_code=200,
+        mimetype='application/json'
     )
