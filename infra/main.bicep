@@ -95,13 +95,13 @@ module fn 'br/public:avm/res/web/site:0.3.9' = { // Function app which will run 
     appSettingsKeyValuePairs: {
       FUNCTIONS_WORKER_RUNTIME: 'python'
       FUNCTIONS_EXTENSION_VERSION: '~4'
-      WEBSITE_RUN_FROM_PACKAGE: '1'
-      DATALAKE__serviceUri: dl.outputs.primaryBlobEndpoint
+      WEBSITE_RUN_FROM_PACKAGE: '1' // This is required to deploy the function app from a package (github cicd)
+      DATALAKE__serviceUri: dl.outputs.primaryBlobEndpoint // Required to have a storage account output binding in the function app
     }
     managedIdentities: {
       systemAssigned: true // Creates a managed identity for the function app to access other azure resources
     }
-    storageAccountResourceId: fnstg.outputs.resourceId
+    storageAccountResourceId: fnstg.outputs.resourceId // Backend storage account for the function app
     storageAccountUseIdentityAuthentication: true // Required to be able to access the storage account without access keys
   }
 }
