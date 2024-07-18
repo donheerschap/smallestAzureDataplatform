@@ -4,4 +4,4 @@
 
 azure-functions
 pandas
-requests
+requests==2.30.0
