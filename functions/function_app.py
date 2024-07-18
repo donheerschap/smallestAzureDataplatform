@@ -28,13 +28,16 @@ def MyHttpTrigger(req: func.HttpRequest) -> func.HttpResponse:
         )
     
 @app.route(route="TestWeatherAPI", auth_level=func.AuthLevel.ANONYMOUS)
-def TestWeatherAPI(req: func.HttpRequest) -> func.HttpResponse:
+@app.blob_output(name='datalake', path='output/test.json', connection='DATALAKE__serviceUri')
+def TestWeatherAPI(req: func.HttpRequest, datalake: func.Out[str]) -> func.HttpResponse:
     logging.info('Python HTTP trigger function processed a request.')
 
     data = requests.get(
         'https://api.open-meteo.com/v1/forecast',
         params={'latitude': '52.374', 'longitude': '4.8897', 'hourly': 'temperature_2m', 'past_days': '1', 'forecast_days': '1'}
         ).json()
+    
+    datalake.set(json.dumps(data))
     
     return func.HttpResponse(
         json.dumps(data),
