@@ -1,3 +1,0 @@
-{
-"azureFunctions.pythonVenv": "${workspaceFolder}/functions/.venv"
-}
