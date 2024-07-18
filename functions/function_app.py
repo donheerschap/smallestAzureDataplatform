@@ -37,7 +37,14 @@ def TestWeatherAPI(req: func.HttpRequest, datalake: func.Out[str]) -> func.HttpR
         params={'latitude': '52.374', 'longitude': '4.8897', 'hourly': 'temperature_2m', 'past_days': '1', 'forecast_days': '1'}
         ).json()
     
-    datalake.set(json.dumps(data))
+    try:
+        datalake.set(json.dumps(data))
+    except Exception as e:
+        logging.error(e)
+        return func.HttpResponse(
+            f"Failed to write to datalake with error {e}",
+            status_code=500
+        )
     
     return func.HttpResponse(
         json.dumps(data),
