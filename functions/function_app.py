@@ -29,7 +29,7 @@ def MyHttpTrigger(req: func.HttpRequest) -> func.HttpResponse:
         )
     
 @app.route(route="TestWeatherAPI", auth_level=func.AuthLevel.ANONYMOUS)
-def MyHttpTrigger(req: func.HttpRequest) -> func.HttpResponse:
+def TestWeatherAPI(req: func.HttpRequest) -> func.HttpResponse:
     logging.info('Python HTTP trigger function processed a request.')
 
     data = requests.get(

@@ -63,7 +63,6 @@ module fnstg 'br/public:avm/res/storage/storage-account:0.9.1' = { // Storage ac
   params: {
     name: fnstgName
     location: location
-    
   }
 }
 
