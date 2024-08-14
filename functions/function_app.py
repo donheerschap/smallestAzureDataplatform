@@ -3,8 +3,19 @@ import datetime
 import json
 import logging
 import requests
+import datetime
+import uuid
 
 app = func.FunctionApp()
+
+def generate_blob_path():
+    current_datetime = datetime.datetime.now()
+    date_str = current_datetime.strftime('%Y-%m-%d')
+    unique_id = str(uuid.uuid4())
+    blob_path = f'raw/{date_str}/{unique_id}.json'
+    return blob_path
+
+_blob_path = generate_blob_path()
 
 @app.route(route="MyHttpTrigger", auth_level=func.AuthLevel.ANONYMOUS)
 def MyHttpTrigger(req: func.HttpRequest) -> func.HttpResponse:
@@ -23,18 +34,9 @@ def MyHttpTrigger(req: func.HttpRequest) -> func.HttpResponse:
         return func.HttpResponse(f"Hello, {name}. This HTTP triggered function executed successfully.")
     else:
         return func.HttpResponse(
-             "This HTTP triggered function executed successfully. Pass a name in the query string or in the request body for a personalized response.3",
+             "This HTTP triggered function executed successfully. Pass a name in the query string or in the request body for a personalized response.4",
              status_code=200
         )
-    
-def generate_blob_path():
-    current_datetime = datetime.datetime.now()
-    date_str = current_datetime.strftime('%Y-%m-%d')
-    unique_id = str(uuid.uuid4())
-    blob_path = f'raw/{date_str}/{unique_id}.json'
-    return blob_path
-
-_blob_path = generate_blob_path()
     
 @app.route(route="TestWeatherAPI", auth_level=func.AuthLevel.ANONYMOUS)
 @app.blob_output(arg_name='datalake', path=_blob_path, connection='DATALAKE')
