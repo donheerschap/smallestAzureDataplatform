@@ -34,7 +34,7 @@ def MyHttpTrigger(req: func.HttpRequest) -> func.HttpResponse:
         return func.HttpResponse(f"Hello, {name}. This HTTP triggered function executed successfully.")
     else:
         return func.HttpResponse(
-             "This HTTP triggered function executed successfully. Pass a name in the query string or in the request body for a personalized response.4",
+             "This HTTP triggered function executed successfully. Pass a name in the query string or in the request body for a personalized response.5",
              status_code=200
         )
     
@@ -54,15 +54,16 @@ def TestWeatherAPI(req: func.HttpRequest, datalake: func.Out[str]) -> func.HttpR
             f"Failed to get data from weather API with error {e}",
             status_code=500
         )
-    
-    try:
-        datalake.set(json.dumps(data))
-    except Exception as e:
-        logging.error(e)
-        return func.HttpResponse(
-            f"Failed to write to datalake with error {e}",
-            status_code=500
-        )
+    write_to_datalake = req.params.get('writetodatalake')
+    if write_to_datalake:
+        try:
+            datalake.set(json.dumps(data))
+        except Exception as e:
+            logging.error(e)
+            return func.HttpResponse(
+                f"Failed to write to datalake with error {e}",
+                status_code=500
+            )
     
     return func.HttpResponse(
         json.dumps(data),

@@ -96,7 +96,7 @@ module fn 'br/public:avm/res/web/site:0.3.9' = { // Function app which will run 
       FUNCTIONS_WORKER_RUNTIME: 'python'
       FUNCTIONS_EXTENSION_VERSION: '~4'
       WEBSITE_RUN_FROM_PACKAGE: '1' // This is required to deploy the function app from a package (github cicd)
-      DATALAKE__serviceUri: dl.outputs.primaryBlobEndpoint // Required to have a storage account output binding in the function app
+      DATALAKE__blobServiceUri: 'https://${dlName}.blob.${environment().suffixes.storage}/' // Required to have a storage account output binding in the function app
     }
     managedIdentities: {
       systemAssigned: true // Creates a managed identity for the function app to access other azure resources
