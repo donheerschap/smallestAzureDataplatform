@@ -72,10 +72,12 @@ def TestWeatherAPI(req: func.HttpRequest, datalake: func.Out[str]) -> func.HttpR
     )
 
 @app.function_name(name="mytimer")
-@app.timer_trigger(schedule="0 0 9 * * *", 
+@app.timer_trigger(schedule="0 0 4 * * *", 
               arg_name="mytimer",
               run_on_startup=True) 
-@app.blob_output(arg_name='datalake', path=_blob_path, connection='DATALAKE')
+@app.blob_output(arg_name='datalake', 
+                 path=f'raw/{datetime.datetime.now().strftime('%Y-%m-%d')}/{str(uuid.uuid4())}.json', 
+                 connection='DATALAKE')
 def timedWeatherAPI(mytimer: func.TimerRequest, datalake: func.Out[str]) -> None:
     utc_timestamp = datetime.datetime.now(datetime.UTC).replace(
         tzinfo=datetime.timezone.utc).isoformat()
@@ -85,7 +87,7 @@ def timedWeatherAPI(mytimer: func.TimerRequest, datalake: func.Out[str]) -> None
     try:
         data = requests.get(
             'https://api.open-meteo.com/v1/forecast',
-            params={'latitude': '52.374', 'longitude': '4.8897', 'hourly': 'temperature_2m', 'past_days': '1', 'forecast_days': '1'}
+            params={'latitude': '52.374', 'longitude': '4.8897', 'hourly': 'temperature_2m', 'past_days': '2', 'forecast_days': '2'}
             ).json()
     except Exception as e:
         logging.error(e)
