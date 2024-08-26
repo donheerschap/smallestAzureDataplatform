@@ -8,7 +8,7 @@ bp = func.Blueprint()
 @bp.blob_trigger(
     arg_name="blob", path="bronze/weatherdata", connection="DATALAKE"
 )
-def process_blob_weather_data(myblob: func.InputStream):
+def process_blob_weather_data(blob: func.InputStream):
    logging.info(f"Python blob trigger function processed blob \n"
-                f"Name: {myblob.name}\n"
-                f"Blob Size: {myblob.length} bytes")
+                f"Name: {blob.name}\n"
+                f"Blob Size: {blob.length} bytes")
