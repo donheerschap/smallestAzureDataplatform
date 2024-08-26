@@ -1,14 +1,24 @@
 import logging
+import os
 
 import azure.functions as func
+from azure.identity import DefaultAzureCredential
+from azure.storage.blob import BlobClient
+import azurefunctions.extensions.bindings.blob as blob
 
 bp = func.Blueprint()
 
 @bp.function_name(name="blobTriggerWeatherData")
 @bp.blob_trigger(
-    arg_name="blob", path="bronze/weatherdata", connection="DATALAKE"
+    arg_name="source_blob", path="bronze/weatherdata", connection="DATALAKE"
 )
-def process_blob_weather_data(blob: func.InputStream):
-   logging.info(f"Python blob trigger function processed blob \n"
-                f"Name: {blob.name}\n"
-                f"Blob Size: {blob.length} bytes")
+def process_blob_weather_data(source_blob: func.InputStream):
+    logging.info(
+        f"Python blob trigger function processed blob \n"
+        f"Properties: {source_blob.get_blob_properties()}\n"
+        f"Blob content head: {source_blob.download_blob().read(size=1)}"
+    )
+    account_url = os.environ['DATALAKE__blobServiceUri']
+    default_credential = DefaultAzureCredential()
+    dest_blob = BlobClient(account_url, credential=default_credential, container_name='silver', blob_name=f'weatherdata/{source_blob.name}')
+    dest_blob.upload_blob(source_blob.read())
