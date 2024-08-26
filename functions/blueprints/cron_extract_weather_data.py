@@ -6,7 +6,7 @@ import requests
 import azure.functions as func
 from azure.identity import DefaultAzureCredential
 from azure.storage.blob import BlobClient
-from shared import generate_blob_path
+from blueprints.shared import generate_blob_path
 
 bp = func.Blueprint()
 

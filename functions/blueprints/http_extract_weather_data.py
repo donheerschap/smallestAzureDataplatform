@@ -2,7 +2,7 @@ import logging
 import json
 import requests
 import azure.functions as func
-from shared import generate_blob_path
+from blueprints.shared import generate_blob_path
 
 bp = func.Blueprint()
 
