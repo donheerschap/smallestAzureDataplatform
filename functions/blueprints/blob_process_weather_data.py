@@ -8,7 +8,6 @@ import azurefunctions.extensions.bindings.blob as blob
 
 bp = func.Blueprint()
 
-@bp.function_name(name="blobTriggerWeatherData")
 @bp.blob_trigger(
     arg_name="source_blob", path="bronze/weatherdata", connection="DATALAKE"
 )
