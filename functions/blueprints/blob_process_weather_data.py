@@ -10,7 +10,7 @@ bp = func.Blueprint()
 
 @bp.function_name(name="sourceblob")
 @bp.blob_trigger(
-    arg_name="sourceblob", path="bronze/weatherdata", connection="DATALAKE"
+    arg_name="sourceblob", path="bronze/weatherdata/{name}.json", connection="DATALAKE"
 )
 def process_blob_weather_data(sourceblob: blob.BlobClient):
     logging.info(
