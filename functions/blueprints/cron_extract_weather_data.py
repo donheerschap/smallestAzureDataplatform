@@ -22,7 +22,7 @@ def timedWeatherAPI(mytimer: func.TimerRequest) -> None:
     
     account_url = os.environ['DATALAKE__blobServiceUri']
     default_credential = DefaultAzureCredential()
-    blob = BlobClient(account_url, credential=default_credential, container_name='raw', blob_name=f'weatherdata/{_blob_path}')
+    blob = BlobClient(account_url, credential=default_credential, container_name='bronze', blob_name=f'weatherdata/{_blob_path}')
 
     if mytimer.past_due:
         logging.info('The timer is past due!')

@@ -9,7 +9,7 @@ bp = func.Blueprint()
 _blob_path = generate_blob_path()
 
 @bp.route(route="TestWeatherAPI", auth_level=func.AuthLevel.ANONYMOUS)
-@bp.blob_output(arg_name='datalake', path=f'raw/manual/{_blob_path}', connection='DATALAKE')
+@bp.blob_output(arg_name='datalake', path=f'bronze/manual/{_blob_path}', connection='DATALAKE')
 def TestWeatherAPI(req: func.HttpRequest, datalake: func.Out[str]) -> func.HttpResponse:
     logging.info('Python HTTP trigger function processed a request.')
 
