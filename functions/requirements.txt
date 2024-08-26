@@ -7,3 +7,4 @@ pandas
 requests
 azure-identity
 azure-storage-blob
+azurefunctions-extensions-bindings-blob
