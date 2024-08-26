@@ -5,6 +5,9 @@ import logging
 import requests
 import datetime
 import uuid
+import os
+from azure.identity import DefaultAzureCredential
+from azure.storage.blob import BlobClient
 
 app = func.FunctionApp()
 
@@ -72,15 +75,17 @@ def TestWeatherAPI(req: func.HttpRequest, datalake: func.Out[str]) -> func.HttpR
     )
 
 @app.function_name(name="mytimer")
-@app.timer_trigger(schedule="0 0 4 * * *", 
+@app.timer_trigger(schedule="0 0 9 * * *", 
               arg_name="mytimer",
               run_on_startup=True) 
-@app.blob_output(arg_name='datalake', 
-                 path=f'raw/{datetime.datetime.now().strftime('%Y-%m-%d')}/{str(uuid.uuid4())}.json', 
-                 connection='DATALAKE')
-def timedWeatherAPI(mytimer: func.TimerRequest, datalake: func.Out[str]) -> None:
+def timedWeatherAPI(mytimer: func.TimerRequest) -> None:
     utc_timestamp = datetime.datetime.now(datetime.UTC).replace(
         tzinfo=datetime.timezone.utc).isoformat()
+    
+    account_url = os.environ['DATALAKE__blobServiceUri']
+    default_credential = DefaultAzureCredential()
+    blob = BlobClient(account_url, credential=default_credential, container_name='raw', blob_name=_blob_path)
+
     if mytimer.past_due:
         logging.info('The timer is past due!')
 
@@ -92,7 +97,7 @@ def timedWeatherAPI(mytimer: func.TimerRequest, datalake: func.Out[str]) -> None
     except Exception as e:
         logging.error(e)
     try:
-        datalake.set(json.dumps(data))
+        blob.upload_blob(json.dumps(data))
     except Exception as e:
         logging.error(e)
     

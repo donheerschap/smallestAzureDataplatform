@@ -5,3 +5,5 @@
 azure-functions
 pandas
 requests
+azure-identity
+azure-storage-blob
