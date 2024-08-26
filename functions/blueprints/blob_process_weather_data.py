@@ -12,7 +12,7 @@ bp = func.Blueprint()
 @bp.blob_trigger(
     arg_name="source_blob", path="bronze/weatherdata", connection="DATALAKE"
 )
-def process_blob_weather_data(source_blob: func.InputStream):
+def process_blob_weather_data(source_blob: blob.BlobClient):
     logging.info(
         f"Python blob trigger function processed blob \n"
         f"Properties: {source_blob.get_blob_properties()}\n"
@@ -22,3 +22,4 @@ def process_blob_weather_data(source_blob: func.InputStream):
     default_credential = DefaultAzureCredential()
     dest_blob = BlobClient(account_url, credential=default_credential, container_name='silver', blob_name=f'weatherdata/{source_blob.name}')
     dest_blob.upload_blob(source_blob.read())
+    logging.info(f"Blob {source_blob.name} copied to silver container")
