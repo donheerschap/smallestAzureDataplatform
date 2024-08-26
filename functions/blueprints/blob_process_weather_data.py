@@ -15,7 +15,7 @@ bp = func.Blueprint()
 def process_blob_weather_data(sourceblob: blob.BlobClient):
     logging.info('Starting to process blob')
     logging.info(
-        f"Python blob trigger function processed blob \n"
+        f"Python blob trigger function processed blob! \n"
         f"Properties: {sourceblob.get_blob_properties()}\n"
         f"Blob content head: {sourceblob.download_blob().read(size=1)}"
     )
