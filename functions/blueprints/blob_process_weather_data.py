@@ -20,7 +20,7 @@ def process_blob_weather_data(sourceblob: blob.BlobClient):
         f"Blob content head: {sourceblob.download_blob().read(size=1)}"
     )
     try:
-        account_url = os.environ['DATALAKE__blobServiceUri']
+        account_url = os.environ['DATALAKE']
         logging.info(f"account_url: {account_url}")
     except Exception as e:
         logging.error(e)
