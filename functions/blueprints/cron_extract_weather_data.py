@@ -10,18 +10,17 @@ from blueprints.shared import generate_blob_path
 
 bp = func.Blueprint()
 
-_blob_path = generate_blob_path()
-
-@bp.function_name(name="mytimer")
+@bp.function_name(name="cron_extract_weather_data")
 @bp.timer_trigger(schedule="0 0 9 * * *", 
               arg_name="mytimer",
               run_on_startup=True) 
-def timedWeatherAPI(mytimer: func.TimerRequest) -> None:
+def cron_extract_weather_data(mytimer: func.TimerRequest) -> None:
     utc_timestamp = datetime.datetime.now(datetime.UTC).replace(
         tzinfo=datetime.timezone.utc).isoformat()
     
     account_url = os.environ['DATALAKE__blobServiceUri']
     default_credential = DefaultAzureCredential()
+    _blob_path = generate_blob_path()
     blob = BlobClient(account_url, credential=default_credential, container_name='bronze', blob_name=f'weatherdata/{_blob_path}')
 
     if mytimer.past_due:

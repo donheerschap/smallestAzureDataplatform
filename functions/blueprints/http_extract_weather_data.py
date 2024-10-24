@@ -2,15 +2,16 @@ import logging
 import json
 import requests
 import azure.functions as func
+import os
+from azure.identity import DefaultAzureCredential
+from azure.storage.blob import BlobClient
 from blueprints.shared import generate_blob_path
 
 bp = func.Blueprint()
 
-_blob_path = generate_blob_path()
-
 @bp.route(route="TestWeatherAPI", auth_level=func.AuthLevel.ANONYMOUS)
-@bp.blob_output(arg_name='datalake', path=f'bronze/manual/{_blob_path}', connection='DATALAKE')
-def TestWeatherAPI(req: func.HttpRequest, datalake: func.Out[str]) -> func.HttpResponse:
+# @bp.blob_output(arg_name='datalake', path=f'bronze/manual/{_blob_path}', connection='DATALAKE')
+def TestWeatherAPI(req: func.HttpRequest) -> func.HttpResponse:
     logging.info('Python HTTP trigger function processed a request.')
 
     try:
@@ -26,8 +27,12 @@ def TestWeatherAPI(req: func.HttpRequest, datalake: func.Out[str]) -> func.HttpR
         )
     write_to_datalake = req.params.get('writetodatalake')
     if write_to_datalake:
+        account_url = os.environ['DATALAKE__blobServiceUri']
+        default_credential = DefaultAzureCredential()
+        _blob_path = generate_blob_path()
+        blob = BlobClient(account_url, credential=default_credential, container_name='bronze', blob_name=f'weatherdata/{_blob_path}')
         try:
-            datalake.set(json.dumps(data))
+            blob.upload_blob(json.dumps(data))
         except Exception as e:
             logging.error(e)
             return func.HttpResponse(
